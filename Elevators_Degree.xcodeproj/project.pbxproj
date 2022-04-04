@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DE15600527F86479003348C3 /* FloorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15600427F86479003348C3 /* FloorView.swift */; };
+		DE3A830527E4FE30008EAEBC /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE3A830427E4FE30008EAEBC /* Enums.swift */; };
+		DE3A830727E4FE4B008EAEBC /* Elevator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE3A830627E4FE4B008EAEBC /* Elevator.swift */; };
+		DE3A830927E4FF16008EAEBC /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE3A830827E4FF16008EAEBC /* Button.swift */; };
+		DE3A830B27E4FF29008EAEBC /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE3A830A27E4FF29008EAEBC /* Task.swift */; };
+		DEA8675427E902320076575F /* Keyboard_VC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEA8675327E902320076575F /* Keyboard_VC.swift */; };
 		DEE5170527DBC3420072E856 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEE5170427DBC3420072E856 /* AppDelegate.swift */; };
 		DEE5170727DBC3420072E856 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEE5170627DBC3420072E856 /* SceneDelegate.swift */; };
 		DEE5170927DBC3420072E856 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEE5170827DBC3420072E856 /* ViewController.swift */; };
@@ -17,6 +23,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		DE15600427F86479003348C3 /* FloorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloorView.swift; sourceTree = "<group>"; };
+		DE3A830427E4FE30008EAEBC /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
+		DE3A830627E4FE4B008EAEBC /* Elevator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Elevator.swift; sourceTree = "<group>"; };
+		DE3A830827E4FF16008EAEBC /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
+		DE3A830A27E4FF29008EAEBC /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
+		DEA8675327E902320076575F /* Keyboard_VC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keyboard_VC.swift; sourceTree = "<group>"; };
 		DEE5170127DBC3420072E856 /* Elevators_Degree.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Elevators_Degree.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DEE5170427DBC3420072E856 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DEE5170627DBC3420072E856 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -59,9 +71,15 @@
 			isa = PBXGroup;
 			children = (
 				DEE5170427DBC3420072E856 /* AppDelegate.swift */,
+				DE3A830427E4FE30008EAEBC /* Enums.swift */,
+				DE3A830627E4FE4B008EAEBC /* Elevator.swift */,
 				DEE5170627DBC3420072E856 /* SceneDelegate.swift */,
 				DEE5170827DBC3420072E856 /* ViewController.swift */,
+				DEA8675327E902320076575F /* Keyboard_VC.swift */,
+				DE3A830827E4FF16008EAEBC /* Button.swift */,
+				DE3A830A27E4FF29008EAEBC /* Task.swift */,
 				DEE5170A27DBC3420072E856 /* Main.storyboard */,
+				DE15600427F86479003348C3 /* FloorView.swift */,
 				DEE5171027DBC3470072E856 /* Assets.xcassets */,
 				DEE5171227DBC3470072E856 /* LaunchScreen.storyboard */,
 				DEE5171527DBC3470072E856 /* Info.plist */,
@@ -141,10 +159,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DE3A830B27E4FF29008EAEBC /* Task.swift in Sources */,
+				DE3A830927E4FF16008EAEBC /* Button.swift in Sources */,
 				DEE5170927DBC3420072E856 /* ViewController.swift in Sources */,
 				DEE5170F27DBC3420072E856 /* Elevators_Degree.xcdatamodeld in Sources */,
+				DE3A830527E4FE30008EAEBC /* Enums.swift in Sources */,
 				DEE5170527DBC3420072E856 /* AppDelegate.swift in Sources */,
 				DEE5170727DBC3420072E856 /* SceneDelegate.swift in Sources */,
+				DE15600527F86479003348C3 /* FloorView.swift in Sources */,
+				DEA8675427E902320076575F /* Keyboard_VC.swift in Sources */,
+				DE3A830727E4FE4B008EAEBC /* Elevator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

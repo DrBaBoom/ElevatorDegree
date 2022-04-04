@@ -7,23 +7,58 @@
 
 import UIKit
 
+protocol KeyboardConnection {
+    func getChosenFloor(from: Int, to: Int)
+}
+
 class Keyboard_VC: UIViewController {
+    
+    @IBOutlet weak var stcView: UIStackView!
+    
+    var zaheila: KeyboardConnection? = nil
+    var floorCount = 0
+    var floor = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        createKeyboard()
+        
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    func createKeyboard() {
+        var levels = floorCount / 3
+        if floorCount % 3 != 0 {
+            levels += 1   // +1 для перехода на последний уровень этажей с Экстра кнопками
+        }
+        
+        var n = 1
+        
+        for _ in 0..<levels {
+            let stackView = UIStackView()
+            stackView.axis = .horizontal
+            stackView.distribution = .fillEqually
+            for _ in 0..<3 {
+                if n > floorCount {
+                    break
+                }
+                let btn = UIButton()
+                btn.setTitle("\(n)", for: .normal)
+                btn.tag = n
+                btn.addTarget(self, action: #selector(floorChosen(_:)), for: .touchUpInside)
+                n += 1
+                stackView.addArrangedSubview(btn)
+            }
+            stcView.insertArrangedSubview(stackView, at: 0)
+        }
+        
     }
-    */
 
+    @objc func floorChosen(_ btn: UIButton) {
+        zaheila?.getChosenFloor(from: floor, to: btn.tag)
+        dismiss(animated: true)
+    }
+    
 }
+
+
