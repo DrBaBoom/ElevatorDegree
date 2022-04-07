@@ -12,7 +12,7 @@ class ViewController: UIViewController, KeyboardConnection {
     let numberOfFloors: Int = 20
     var tasks: [Task] = []
     var floorViews: [FloorView] = []
-    let elevators = [Elevator(curentFloor: 20)]
+    let elevators = [Elevator(currentFloor: 20)]
     var delays: [TimeInterval] = [0]
     var currentChose: Int = 0
     
@@ -76,7 +76,7 @@ class ViewController: UIViewController, KeyboardConnection {
                 for (i ,task) in tasks.enumerated() {
                     if task.state == .free {
                         if let cclosestTask = closestTask {
-                            if abs(elevator.curentFloor - cclosestTask.from) > abs(elevator.curentFloor - task.from) {
+                            if abs(elevator.currentFloor - cclosestTask.from) > abs(elevator.currentFloor - task.from) {
                                 closestTask = task
                                 k = i
                             }
@@ -87,7 +87,7 @@ class ViewController: UIViewController, KeyboardConnection {
                     }
                 }
                 if let cclosestTask = closestTask {
-                    elevator.state = (cclosestTask.from > elevator.curentFloor) ? .moveUp : .moveDown
+                    elevator.state = (cclosestTask.from > elevator.currentFloor) ? .moveUp : .moveDown
                     cclosestTask.state = .elevatorIsComing
                     elevator.moveToTasks.append(cclosestTask)
                     tasks.remove(at: k)
@@ -95,16 +95,16 @@ class ViewController: UIViewController, KeyboardConnection {
             } else {
                 
                 if elevator.moveToTasks[0].state == .delivering {
-                    elevator.state = (elevator.moveToTasks[0].to > elevator.curentFloor) ? .moveUp : .moveDown
+                    elevator.state = (elevator.moveToTasks[0].to > elevator.currentFloor) ? .moveUp : .moveDown
                 } else if elevator.moveToTasks[0].state == .elevatorIsComing {
-                    elevator.state = (elevator.moveToTasks[0].from > elevator.curentFloor) ? .moveUp : .moveDown
+                    elevator.state = (elevator.moveToTasks[0].from > elevator.currentFloor) ? .moveUp : .moveDown
                 }
             }
             
         } else if elevator.state == .moveDown {
-            let liftEdetSEtaja = elevator.curentFloor
-            let elevatorTask = elevator.moveToTasks.first!
-            let liftEdetNaEtaj = (elevatorTask.state == .delivering) ? elevatorTask.to : elevatorTask.from
+            let liftEdetSEtaja = elevator.currentFloor
+//            let liftEdetNaEtaj = elevator.closestTaskFloor!
+//            let elevatorTask = elevator.moveToTasks.first!
             for task in tasks {
                 if task.state == .free
                     && task.direction == .down
@@ -117,9 +117,9 @@ class ViewController: UIViewController, KeyboardConnection {
                 }
             }
         } else if elevator.state == .moveUp {
-            let liftEdetSEnaja = elevator.curentFloor
-            let elevatorTask = elevator.moveToTasks.first!
-            let liftEdetNaEtaj = (elevatorTask.state == .delivering) ? elevatorTask.to : elevatorTask.from
+            let liftEdetSEnaja = elevator.currentFloor
+//            let elevatorTask = elevator.moveToTasks.first!
+//            let liftEdetNaEtaj = elevator.closestTaskFloor
             for task in tasks {
                 if task.state == .free
                     && task.direction == .up
@@ -204,22 +204,15 @@ class ViewController: UIViewController, KeyboardConnection {
             
             if !e.moveToTasks.isEmpty && !e.isAnimated {
                 
-                for t in e.moveToTasks {
-                    if t.to == e.curentFloor || t.from == e.curentFloor {
-//                        stoped?
-                    }
-                    
-                }
+                let endPoint = e.closestTaskFloor!
                 
-                let endPoint = (e.moveToTasks[0].state == .elevatorIsComing) ? e.moveToTasks[0].from : e.moveToTasks[0].to
-                
-                if endPoint < e.curentFloor {
+                if endPoint < e.currentFloor {
                     e.state = .moveDown
-                } else if endPoint > e.curentFloor {
+                } else if endPoint > e.currentFloor {
                     e.state = .moveUp
                 } else {
                     e.state = .stopped
-                    e.moveToTasks.remove(at: 0)
+                    e.removeDelivered(to: e.currentFloor)
                 }
                 
                 var koef: Int? = nil
@@ -240,33 +233,34 @@ class ViewController: UIViewController, KeyboardConnection {
                                    completion: { isCompleted in
                         if isCompleted {
                             e.isAnimated = false
-                            self.delays[i] = 0
-                            e.curentFloor += kkoef
-                            if e.moveToTasks[0].state == .elevatorIsComing
-                                && e.curentFloor == e.moveToTasks[0].from {
-                                e.moveToTasks[0].state = .delivering
-                                self.delays[i] = 1
-                                
-                                if e.moveToTasks[0].to > e.curentFloor {
-                                    e.state = .moveUp
-                                } else {
-                                    e.state = .moveDown
-                                }
-                                
-                            } else if e.moveToTasks[0].state == .delivering
-                                        && e.curentFloor == e.moveToTasks[0].to {
-                                e.moveToTasks.remove(at: 0)
-                                self.delays[i] = 1
-                                
-                                if e.moveToTasks.isEmpty {
-                                    e.state = .stopped
-                                }
-                            }
+                            e.currentFloor += kkoef
+                            
+                            self.delays[i] = e.doSomething() ? 1 : 0
+                    
+//                            if e.moveToTasks[0].state == .elevatorIsComing
+//                                && e.currentFloor == e.moveToTasks[0].from {
+//                                e.moveToTasks[0].state = .delivering
+//                                self.delays[i] = 1
+//                                
+//                                if e.moveToTasks[0].to > e.currentFloor {
+//                                    e.state = .moveUp
+//                                } else {
+//                                    e.state = .moveDown
+//                                }
+//                                
+//                            } else if e.moveToTasks[0].state == .delivering
+//                                        && e.currentFloor == e.moveToTasks[0].to {
+//                                e.moveToTasks.remove(at: 0)
+//                                self.delays[i] = 1
+//                                
+//                                if e.moveToTasks.isEmpty {
+//                                    e.state = .stopped
+//                                }
+//                            }
                             
                             DispatchQueue.main.async {
                                 self.updateStatus()
                             }
-                            
                         }
                     })
                 }
