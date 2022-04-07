@@ -204,7 +204,7 @@ class ViewController: UIViewController, KeyboardConnection {
             
             if !e.moveToTasks.isEmpty && !e.isAnimated {
                 
-                let endPoint = e.closestTaskFloor!
+                let endPoint = e.closestTaskFloor!     //TODO: 1
                 
                 if endPoint < e.currentFloor {
                     e.state = .moveDown
@@ -212,7 +212,17 @@ class ViewController: UIViewController, KeyboardConnection {
                     e.state = .moveUp
                 } else {
                     e.state = .stopped
-                    e.removeDelivered(to: e.currentFloor)
+                    if e.unLoadAndLoadEveryone() {
+                        setLabels()
+                        if !e.moveToTasks.isEmpty {
+                            let nextTask = e.moveToTasks[0]
+                            if nextTask.state == .delivering {
+                                e.state = nextTask.to > e.currentFloor ? .moveUp : .moveDown
+                            } else if nextTask.state == .elevatorIsComing {
+                                e.state = nextTask.from > e.currentFloor ? .moveUp : .moveDown
+                            }
+                        }
+                    }
                 }
                 
                 var koef: Int? = nil
@@ -235,7 +245,7 @@ class ViewController: UIViewController, KeyboardConnection {
                             e.isAnimated = false
                             e.currentFloor += kkoef
                             
-                            self.delays[i] = e.doSomething() ? 1 : 0
+                            self.delays[i] = e.unLoadAndLoadEveryone() ? 1 : 0
                     
 //                            if e.moveToTasks[0].state == .elevatorIsComing
 //                                && e.currentFloor == e.moveToTasks[0].from {
@@ -272,7 +282,4 @@ class ViewController: UIViewController, KeyboardConnection {
 
 
 
-/*
- TODO: Создать массив Лейблов, которые будут показывать кто куда хочет поехать (на каждом этаже по списку цифр получится)
-        
- */
+

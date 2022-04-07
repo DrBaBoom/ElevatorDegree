@@ -74,11 +74,11 @@ class Elevator {
         return moveToTasks.filter({ t in t.to == floor || t.from == floor })
     }
     
-    func removeDelivered(to floor: Int) {
+    private func removeDelivered(to floor: Int) {
         moveToTasks = moveToTasks.filter({ t in t.to != floor })
     }
     
-    func doSomething() -> Bool {
+    func unLoadAndLoadEveryone() -> Bool {
         if let cTf = closestTaskFloor, cTf == currentFloor {
             removeDelivered(to: currentFloor)
             for t in moveToTasks {
