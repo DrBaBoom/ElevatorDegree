@@ -65,7 +65,20 @@
                                     </view>
                                     <view verifyAmbiguity="off" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="g5o-mQ-IJU" userLabel="elevator2">
                                         <rect key="frame" x="37.5" y="50" width="32" height="568"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1hV-SN-lE3" userLabel="Lbl Elevator2">
+                                                <rect key="frame" x="4" y="0.0" width="24" height="80"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="9"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <constraints>
+                                            <constraint firstItem="1hV-SN-lE3" firstAttribute="top" secondItem="g5o-mQ-IJU" secondAttribute="top" id="Et6-F8-ElT"/>
+                                            <constraint firstAttribute="bottom" secondItem="1hV-SN-lE3" secondAttribute="bottom" id="ZZj-3g-LwC"/>
+                                            <constraint firstItem="1hV-SN-lE3" firstAttribute="centerX" secondItem="g5o-mQ-IJU" secondAttribute="centerX" id="h8g-MA-ioj"/>
+                                        </constraints>
                                     </view>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemIndigoColor"/>
@@ -100,6 +113,7 @@
                     <connections>
                         <outlet property="constrElevator1Height" destination="q3g-bT-aCJ" id="nOE-M3-bU1"/>
                         <outlet property="lblElevator1" destination="XXN-20-OLW" id="tRT-tJ-Jmz"/>
+                        <outlet property="lblElevator2" destination="1hV-SN-lE3" id="yCt-ti-qEO"/>
                         <outlet property="stackFloors" destination="BQH-ew-Ygv" id="eTt-gA-Gpb"/>
                         <outletCollection property="viewElevatorsCollection" destination="AfS-Y4-wdk" collectionClass="NSMutableArray" id="ed2-P7-i8o"/>
                         <outletCollection property="viewElevatorsCollection" destination="g5o-mQ-IJU" collectionClass="NSMutableArray" id="3y9-YB-ZOz"/>

@@ -12,12 +12,14 @@ class ViewController: UIViewController, KeyboardConnection {
     let numberOfFloors: Int = 20
     var tasks: [Task] = []
     var floorViews: [FloorView] = []
-    let elevators = [Elevator(currentFloor: 20)]
-    var delays: [TimeInterval] = [0]
+    let elevators = [Elevator(currentFloor: 20), Elevator(currentFloor: 20)]
+    var delays: [TimeInterval] = [0, 0]
     var currentChose: Int = 0
+    var elevatorLabels: [UILabel] = []
     
     @IBOutlet weak var constrElevator1Height: NSLayoutConstraint!
     @IBOutlet weak var lblElevator1: UILabel!
+    @IBOutlet weak var lblElevator2: UILabel!
     @IBOutlet weak var stackFloors: UIStackView!
 //    @IBOutlet weak var btnFirstFloor: UIButton!
     
@@ -38,6 +40,8 @@ class ViewController: UIViewController, KeyboardConnection {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        elevatorLabels = [lblElevator1, lblElevator2]
         
 //        let btnColor = btnFirstFloor.titleColor(for: .normal)
 //        for f in 2...numberOfFloors {
@@ -67,68 +71,69 @@ class ViewController: UIViewController, KeyboardConnection {
     }
     
     func updateStatus() {
-        let elevator = elevators[0]
-//        let tasks = getAllTasks()
-        if elevator.state == .stopped {
-            if elevator.moveToTasks.isEmpty {
-                var closestTask: Task? = nil
-                var k = 0
-                for (i ,task) in tasks.enumerated() {
-                    if task.state == .free {
-                        if let cclosestTask = closestTask {
-                            if abs(elevator.currentFloor - cclosestTask.from) > abs(elevator.currentFloor - task.from) {
+        for elevator in elevators {
+    //        let tasks = getAllTasks()
+            if elevator.state == .stopped {
+                if elevator.moveToTasks.isEmpty {
+                    var closestTask: Task? = nil
+                    var k = 0
+                    for (i ,task) in tasks.enumerated() {
+                        if task.state == .free {
+                            if let cclosestTask = closestTask {
+                                if abs(elevator.currentFloor - cclosestTask.from) > abs(elevator.currentFloor - task.from) {
+                                    closestTask = task
+                                    k = i
+                                }
+                            } else {
                                 closestTask = task
                                 k = i
                             }
-                        } else {
-                            closestTask = task
-                            k = i
                         }
                     }
+                    if let cclosestTask = closestTask {
+                        elevator.state = (cclosestTask.from > elevator.currentFloor) ? .moveUp : .moveDown
+                        cclosestTask.state = .elevatorIsComing
+                        elevator.moveToTasks.append(cclosestTask)
+                        tasks.remove(at: k)
+                    }
+                } else {
+                    
+                    if elevator.moveToTasks[0].state == .delivering {
+                        elevator.state = (elevator.moveToTasks[0].to > elevator.currentFloor) ? .moveUp : .moveDown
+                    } else if elevator.moveToTasks[0].state == .elevatorIsComing {
+                        elevator.state = (elevator.moveToTasks[0].from > elevator.currentFloor) ? .moveUp : .moveDown
+                    }
                 }
-                if let cclosestTask = closestTask {
-                    elevator.state = (cclosestTask.from > elevator.currentFloor) ? .moveUp : .moveDown
-                    cclosestTask.state = .elevatorIsComing
-                    elevator.moveToTasks.append(cclosestTask)
-                    tasks.remove(at: k)
-                }
-            } else {
                 
-                if elevator.moveToTasks[0].state == .delivering {
-                    elevator.state = (elevator.moveToTasks[0].to > elevator.currentFloor) ? .moveUp : .moveDown
-                } else if elevator.moveToTasks[0].state == .elevatorIsComing {
-                    elevator.state = (elevator.moveToTasks[0].from > elevator.currentFloor) ? .moveUp : .moveDown
+            } else if elevator.state == .moveDown {
+                let liftEdetSEtaja = elevator.currentFloor
+    //            let liftEdetNaEtaj = elevator.closestTaskFloor!
+    //            let elevatorTask = elevator.moveToTasks.first!
+                for task in tasks {
+                    if task.state == .free
+                        && task.direction == .down
+                        && liftEdetSEtaja > task.from {
+    //                    && liftEdetNaEtaj <= task.to {
+    //                    elevator.moveToTasks.insert(task, at: 0)
+                        elevator.moveToTasks.append(task)
+                        task.state = .elevatorIsComing
+                        break
+                    }
                 }
-            }
-            
-        } else if elevator.state == .moveDown {
-            let liftEdetSEtaja = elevator.currentFloor
-//            let liftEdetNaEtaj = elevator.closestTaskFloor!
-//            let elevatorTask = elevator.moveToTasks.first!
-            for task in tasks {
-                if task.state == .free
-                    && task.direction == .down
-                    && liftEdetSEtaja > task.from {
-//                    && liftEdetNaEtaj <= task.to {
-//                    elevator.moveToTasks.insert(task, at: 0)
-                    elevator.moveToTasks.append(task)
-                    task.state = .elevatorIsComing
-                    break
-                }
-            }
-        } else if elevator.state == .moveUp {
-            let liftEdetSEnaja = elevator.currentFloor
-//            let elevatorTask = elevator.moveToTasks.first!
-//            let liftEdetNaEtaj = elevator.closestTaskFloor
-            for task in tasks {
-                if task.state == .free
-                    && task.direction == .up
-                    && liftEdetSEnaja < task.from {
-//                    && liftEdetNaEtaj >= task.to {
-//                    elevator.moveToTasks.insert(task, at: 0)
-                    elevator.moveToTasks.append(task)
-                    task.state = .elevatorIsComing
-                    break
+            } else if elevator.state == .moveUp {
+                let liftEdetSEnaja = elevator.currentFloor
+    //            let elevatorTask = elevator.moveToTasks.first!
+    //            let liftEdetNaEtaj = elevator.closestTaskFloor
+                for task in tasks {
+                    if task.state == .free
+                        && task.direction == .up
+                        && liftEdetSEnaja < task.from {
+    //                    && liftEdetNaEtaj >= task.to {
+    //                    elevator.moveToTasks.insert(task, at: 0)
+                        elevator.moveToTasks.append(task)
+                        task.state = .elevatorIsComing
+                        break
+                    }
                 }
             }
         }
@@ -200,7 +205,7 @@ class ViewController: UIViewController, KeyboardConnection {
         for (i, e) in elevators.enumerated() {
             let deliveringTasks = e.moveToTasks.filter( { t in t.state == .delivering } )
             let x = deliveringTasks.map({ t in String(t.to) })
-            lblElevator1.text = x.joined(separator: ", ")
+            elevatorLabels[i].text = x.joined(separator: ", ")
             
             if !e.moveToTasks.isEmpty && !e.isAnimated {
                 
